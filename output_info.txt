@@ -1,0 +1,40 @@
+Valid nodes include: 
+1, which is connected with the following edges: (1, 12) 
+6, which is connected with the following edges: (24, 6) 
+12, which is connected with the following edges: (1, 12) (12, 16) (12, 16) 
+16, which is connected with the following edges: (12, 16) (12, 16) (16, 17) 
+17, which is connected with the following edges: (16, 17) (17, 20) (17, 21) 
+20, which is connected with the following edges: (17, 20) (20, 22) (20, 22) 
+21, which is connected with the following edges: (17, 21) (21, 23) (21, 23) 
+22, which is connected with the following edges: (20, 22) (20, 22) (22, 24) 
+23, which is connected with the following edges: (21, 23) (21, 23) (23, 24) 
+24, which is connected with the following edges: (22, 24) (23, 24) (24, 6) 
+--------------------
+The following flow paths consist of parallel edges:
+Path (12, 16).
+The resistance of the parallel edges are: 3.4176e+12 2.5632e+12.
+The total resistance of this path is 1.46469e+12
+Path (20, 22).
+The resistance of the parallel edges are: 4.272e+11 4.272e+11.
+The total resistance of this path is 2.136e+11
+Path (21, 23).
+The resistance of the parallel edges are: 4.272e+11 4.272e+11.
+The total resistance of this path is 2.136e+11
+--------------------
+Edge (1, 12) inherits 100% of the flow_rate from its predecessor channels.
+Edge (12, 16) inherits 57.1429% of the flow_rate from its predecessor channels.
+Edge (12, 16) inherits 42.8571% of the flow_rate from its predecessor channels.
+Edge (16, 17) inherits 100% of the flow_rate from its predecessor channels.
+Edge (17, 20) inherits 100% of the flow_rate from its predecessor channels.
+Edge (17, 21) inherits 100% of the flow_rate from its predecessor channels.
+Edge (20, 22) inherits 50% of the flow_rate from its predecessor channels.
+Edge (20, 22) inherits 50% of the flow_rate from its predecessor channels.
+Edge (21, 23) inherits 50% of the flow_rate from its predecessor channels.
+Edge (21, 23) inherits 50% of the flow_rate from its predecessor channels.
+Edge (22, 24) inherits 100% of the flow_rate from its predecessor channels.
+Edge (23, 24) inherits 100% of the flow_rate from its predecessor channels.
+Edge (24, 6) inherits 100% of the flow_rate from its predecessor channels.
+--------------------
+At 3 seconds, Edge (1, 12) is 100% occupied.
+At 3 seconds, Edge (12, 16) is 39.5419% occupied.
+At 3 seconds, Edge (12, 16) is 22.2423% occupied.

@@ -1,9 +1,9 @@
 #include<tuple>
 #include "graph.h"
+#include "find_path.h"
 
-
-std::tuple<std::map<Graph::Edge, double>, std::map<std::pair<Graph::Node *, Graph::Node *>, double>, double > find_path(Graph & g){
-  std::map<Graph::Edge, double> seq_res;
+std::tuple<std::map<Graph::Edge, std::pair<Graph::Edge*, double>>, std::map<std::pair<Graph::Node *, Graph::Node *>, double>, double > find_path(Graph & g){
+  std::map<Graph::Edge, std::pair<Graph::Edge*, double>> seq_res;
   std::map<std::pair<Graph::Node *, Graph::Node *>, double> par_res;
   std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Edge *, double>> resistance = initialize(seq_res, par_res, g);
   refine(resistance, seq_res, par_res);
@@ -11,14 +11,15 @@ std::tuple<std::map<Graph::Edge, double>, std::map<std::pair<Graph::Node *, Grap
   return std::make_tuple(seq_res, par_res, total_resistance); 
 }
 
-std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Edge *,double> > initialize(std::map<Graph::Edge, double > & seq_res, std::map<std::pair<Graph::Node *, Graph::Node *>, double> & par_res, Graph & g){
+std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Edge *,double> > initialize(std::map<Graph::Edge, std::pair<Graph::Edge*, double> > & seq_res, std::map<std::pair<Graph::Node *, Graph::Node *>, double> & par_res, Graph & g){
   std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Edge *, double>> resistance;
-  for (auto i : g.edges()){
-    seq_res[Graph::Edge(seq_res.size()+1, i.second.ends(), 0, &(i.second))] = get_seq_resist(i.second.length());
-    if (resistance.find(i.second.ends()) == resistance.end())
+  for (auto & i : g.edges()){
+    seq_res[Graph::Edge(seq_res.size()+1, i.second.ends(), 0)] = std::make_pair(&(i.second), get_seq_resist(i.second.length()));
+    if (resistance.find(i.second.ends()) == resistance.end()){
       resistance[i.second.ends()] = std::make_pair(&(i.second), get_seq_resist(i.second.length()));
+    }
     else{
-      par_res[i.second.ends()] = get_par_resist(get_seq_resist(i.second.length()), par_res[i.second.ends()]);
+      par_res[i.second.ends()] = get_par_resist(get_seq_resist(i.second.length()), resistance[i.second.ends()].second);
       resistance[i.second.ends()].second = par_res[i.second.ends()];
     }  
   }
@@ -54,7 +55,7 @@ std::pair< std::map<Graph::Edge, std::pair<Graph::Edge*, double>>, std::set<std:
 	    if (i.first.first == j.first.second && node_count[i.first.first]==2){
 	      to_be_erased.insert(i.first);
 	      to_be_erased.insert(j.first);
-              to_be_added[Graph::Edge(0, i.first, 0, j.second.first)] = std::make_pair(j.second.first, i.second.second + j.second.second);
+              to_be_added[Graph::Edge(0, i.first, 0)] = std::make_pair(j.second.first, i.second.second + j.second.second);
 	      settled_node.insert(i.first.first);
 	      settled_node.insert(i.first.second);
 	      settled_node.insert(j.first.first);
@@ -62,7 +63,7 @@ std::pair< std::map<Graph::Edge, std::pair<Graph::Edge*, double>>, std::set<std:
 	    if (i.first.second == j.first.first && node_count[j.first.first]==2){
 	      to_be_erased.insert(i.first);
 	      to_be_erased.insert(j.first);
-              to_be_added[Graph::Edge(0, std::make_pair(i.first.first, j.first.second), 0, i.second.first)] = std::make_pair(i.second.first, i.second.second + j.second.second);
+              to_be_added[Graph::Edge(0, std::make_pair(i.first.first, j.first.second), 0)] = std::make_pair(i.second.first, i.second.second + j.second.second);
 	      settled_node.insert(i.first.first);
 	      settled_node.insert(i.first.second);
 	      settled_node.insert(j.first.second);
@@ -74,7 +75,7 @@ std::pair< std::map<Graph::Edge, std::pair<Graph::Edge*, double>>, std::set<std:
   return std::make_pair(to_be_added, to_be_erased);
 }
 
-void refine(std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Edge* ,double> > & resistance, std::map<Graph::Edge, double> & seq_res, std::map<std::pair<Graph::Node *, Graph::Node *>, double> & par_res){
+void refine(std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Edge* ,double> > & resistance, std::map<Graph::Edge, std::pair<Graph::Edge*, double>> & seq_res, std::map<std::pair<Graph::Node *, Graph::Node *>, double> & par_res){
   int valid = 0;
   while (valid != resistance.size()){
     valid = resistance.size();
@@ -82,7 +83,7 @@ void refine(std::map<std::pair<Graph::Node *,Graph::Node *>, std::pair<Graph::Ed
     for (auto i : add_erase_pair.second)
     resistance.erase(i);
     for (auto i : add_erase_pair.first){
-      seq_res[Graph::Edge(seq_res.size()+1, i.first.ends(), 0, i.second.first)] = i.second.second;
+      seq_res[Graph::Edge(seq_res.size()+1, i.first.ends(), 0)] = i.second;
       if (resistance.find(i.first.ends()) == resistance.end()){
         resistance[i.first.ends()] = i.second;
       }

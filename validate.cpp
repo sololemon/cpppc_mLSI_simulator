@@ -1,6 +1,6 @@
 #include "graph.h"
+#include "validate.h"
 #include<map>
-
 
 Graph validate(std::map<int, Graph::Node *> & blocked_nodes, Graph & g){
   Graph valid_graph = initialize(blocked_nodes, g);
@@ -112,9 +112,9 @@ void guide_direction(Graph & g){
     if (node_level[i.second.ends().first->index()] > node_level[i.second.ends().second->index()])
       i.second.swap_ends();
   // Add the edges ending at node i to i.from, add the edges starting from node i to i.to
-  for (auto & i : related_edges){
-    g.nodes()[i->ends().first->index()].connect_out(i);
-    g.nodes()[i->ends().second->index()].connect_in(i);
+  for (auto & i : g.edges()){
+    g.nodes()[i.second.ends().first->index()].connect_out(&(i.second));
+    g.nodes()[i.second.ends().second->index()].connect_in(&(i.second));
   }
 }
 

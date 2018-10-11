@@ -28,7 +28,6 @@ class Graph{
         int _index;
         std::pair<Node *, Node *> _ends;
         double _length = 0;
-        Edge * _origin = this;
 
       public:
 
@@ -37,8 +36,8 @@ class Graph{
         Edge(int index, Node * a, Node * b, double length) 
           : _index(index), _ends(std::make_pair(a,b)), _length(length){}
         
-        Edge(int index, std::pair<Node *, Node *> ends, double length, Edge * origin) 
-          : _index(index), _ends(ends), _length(length), _origin(origin){}
+        Edge(int index, std::pair<Node *, Node *> ends, double length) 
+          : _index(index), _ends(ends), _length(length){}
 
         void swap_ends(){
           Node * temp = _ends.first;
@@ -56,10 +55,6 @@ class Graph{
 
         const double & length() const{
           return _length;
-        }
-
-        Edge * origin(){
-          return _origin;
         }
 
         bool operator ==(const Edge & other) const{
