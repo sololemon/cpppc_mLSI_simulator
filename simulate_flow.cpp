@@ -27,14 +27,12 @@ double get_volumn(double flow_rate, double time){
 }
 
 Graph::Node * find_departure(Graph & g){
-  Graph::Node * target;
+  Graph::Node * target = nullptr;
   for (auto & i : g.nodes()){
     if (i.second.type()=='i'){
       target = &i.second;
       break;
     }
-    else
-      std::cerr<<"There is no inlet and thus no flow movement."<<std::endl;
   }
   return target;
 }

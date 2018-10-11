@@ -1,13 +1,25 @@
 #include "graph.h"
 #include "validate.h"
+#include "simulate_flow.h"
 #include<map>
 
 Graph validate(std::map<int, Graph::Node *> & blocked_nodes, Graph & g){
   Graph valid_graph = initialize(blocked_nodes, g);
-  delete_invalid_branch(valid_graph);
-  delete_intermediate_node(valid_graph);
+  int count = 0;
+  while (count != valid_graph.nodes().size()){
+    count = valid_graph.nodes().size();
+    delete_invalid_nodes(valid_graph);
+    delete_invalid_branch(valid_graph);
+    delete_intermediate_node(valid_graph);
+  }
+  Graph::Node * departure = find_departure(valid_graph);
+  if (departure == nullptr){
+    std::cout<<"There is no open inlet and thus no feasible flow path."<<std::endl;
+    valid_graph.set_flag(false);
+    return valid_graph; 
+  }
   refine_edges(valid_graph);
-  guide_direction(valid_graph);
+  guide_direction(valid_graph, departure);
   return valid_graph;
 }
 
@@ -79,6 +91,23 @@ void delete_intermediate_node(Graph & g){
   }
 }
 
+void delete_invalid_nodes(Graph & g){
+  std::set<int> to_be_erased_branch_index;
+  for (auto & i : g.nodes()){
+    if (i.second.connections().size() == 0)
+      to_be_erased_branch_index.insert(i.first);
+    if (i.second.connections().size() == 1 && i.second.type() != 'i' && i.second.type() != 'o')
+      to_be_erased_branch_index.insert(i.first);
+  }
+  for (auto & i : to_be_erased_branch_index){
+    for (auto & j: g.nodes()[i].connections()){
+      g.nodes()[j->ends().first->index()].disconnect(j);
+      g.nodes()[j->ends().second->index()].disconnect(j);
+    }
+    g.nodes().erase(i);
+  }
+}
+
 void refine_edges(Graph & g){
   g.edges().clear();
   std::set<Graph::Edge *> related_edges = get_related_edges(g.nodes().begin(),g.nodes().end());
@@ -89,13 +118,8 @@ void refine_edges(Graph & g){
   }
 }
 
-void guide_direction(Graph & g){
-  int departure = 0;
-  for (auto i : g.nodes())
-    if (i.second.type() == 'i'){
-      departure = i.second.index();
-      break;
-    }
+void guide_direction(Graph & g, Graph::Node * departure_node){
+  int departure = departure_node->index();
   std::map<int, int> node_level;
   node_level[departure] = 0;
   while (node_level.size() != g.nodes().size())

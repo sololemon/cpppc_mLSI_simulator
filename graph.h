@@ -210,11 +210,17 @@ class Graph{
     };
 
   private:
+    bool _flag = true;
     std::map<int, Node> _nodes;
     std::map<int, Edge> _edges;
     std::map<int, CChannel> _cchannels;
 
   public:
+
+    bool flag(){
+      return _flag;
+    }
+ 
     std::map<int, Node> & nodes(){
       return _nodes;
     }
@@ -225,6 +231,10 @@ class Graph{
 
     std::map<int, CChannel> & cchannels(){
       return _cchannels;
+    }
+
+    void set_flag(bool flag){
+      _flag = flag;
     }
 
 };

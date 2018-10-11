@@ -8,11 +8,13 @@ Graph validate(std::map<int, Graph::Node *> &, Graph &);
 
 Graph initialize(std::map<int, Graph::Node *> &, Graph &);
 
+void delete_invalid_nodes(Graph &);
+
 void delete_invalid_branch(Graph &);
 
 void delete_intermediate_node(Graph &);
 
-void guide_direction(Graph &);
+void guide_direction(Graph &, Graph::Node *);
 
 Graph::Edge merge(int, Graph::Edge &, Graph::Edge &);
 

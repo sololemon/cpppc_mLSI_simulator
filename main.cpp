@@ -10,6 +10,8 @@ int main(int argc, char* argv[]) {
   Graph basic_graph = construct(argv[1]);
   std::map<int, Graph::Node *> blocked_nodes = pressurize(argv[2], basic_graph);
   Graph valid_graph = validate(blocked_nodes, basic_graph);
+  if (valid_graph.flag() == false)
+    return 1;
   std::tuple<std::map<Graph::Edge, std::pair<Graph::Edge *, double>>, std::map<std::pair<Graph::Node*, Graph::Node *>, double>, double> seq_par_res = find_path(valid_graph); 
   std::pair<std::map<Graph::Edge *, double>,double> flow_collection = get_flow_rate(seq_par_res);
   std::cout<<"Please give the execution time: ";
