@@ -35,6 +35,7 @@ Edge (22, 24) inherits 100% of the flow_rate from its predecessor channels.
 Edge (23, 24) inherits 100% of the flow_rate from its predecessor channels.
 Edge (24, 6) inherits 100% of the flow_rate from its predecessor channels.
 --------------------
-At 3 seconds, Edge (1, 12) is 100% occupied.
-At 3 seconds, Edge (12, 16) is 39.5419% occupied.
-At 3 seconds, Edge (12, 16) is 22.2423% occupied.
+At 7 seconds, Edge (1, 12) is 100% occupied.
+At 7 seconds, Edge (12, 16) is 100% occupied.
+At 7 seconds, Edge (12, 16) is 60.8273% occupied.
+At 7 seconds, Edge (16, 17) is 97.6499% occupied.
