@@ -2,7 +2,10 @@
 #include "flow.h"
 
 std::pair<std::map<Graph::Edge *, double>, double> 
-get_flow_rate(std::tuple<std::map<Graph::Edge, std::pair<Graph::Edge *,double>>, std::map<std::pair<Graph::Node*, Graph::Node *>, double>, double> & seq_par_res){
+get_flow_rate(std::tuple<std::map<Graph::Edge, std::pair<Graph::Edge *,double>>, 
+                         std::map<std::pair<Graph::Node*, Graph::Node *>, 
+                         double>,
+              double> & seq_par_res){
   double flow_rate_total = calculate_flow_rate(PRESSURE, std::get<2>(seq_par_res));
   std::map<Graph::Edge *, double> flow_rate;
   for (auto & i : std::get<1>(seq_par_res))
